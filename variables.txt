@@ -1,0 +1,29 @@
+Income
+`Dual Income`
+`Prev Child Mag`
+`Is Professional`
+White
+`Is Married`
+`Has College`
+House
+Own
+
+
+Income
+`Dual Income`
+`Prev Child Mag`
+White
+Income:Own
+Income:`Dual Income`
+Income:`Is Professional`
+Income:White
+`Prev Child Mag`:White:`Is Married`
+Income:House:`Is Professional`:`Has College`
+
+
+`Dual Income`
+White
+Income:Own
+Income:`Dual Income`
+Income:White
+

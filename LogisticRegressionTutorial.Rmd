@@ -1,0 +1,265 @@
+---
+title: "Logistic Regression Tutorial"
+author: "Unnamed"
+date: "2018/05/24"
+header-includes:
+  \usepackage{ctex}
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 
+
+http://ww2.coastal.edu/kingw/statistics/R-tutorials/logistic.html
+\[http://ww2.coastal.edu/kingw/statistics/R-tutorials/logistic.html\]
+
+Example 1: In the "MASS" library there is a data set called "menarche" (Milicer, H. and Szczotka, F., 1966, Age at Menarche in Warsaw girls in 1965, Human Biology, 38, 199-203), in which there are three variables: "Age" (average age of age homogeneous groups of girls), "Total" (number of girls in each group), and "Menarche" (number of girls in the group who have reached menarche).
+
+***
+
+## Logistic Regression: One Numeric Predictor
+
+```{r}
+library("MASS")
+help("menarche")
+data("menarche")
+str(menarche)
+?str()
+```
+
+```{r}
+summary(menarche)
+```
+
+```{r}
+plot(Menarche/Total ~ Age, data=menarche)
+```
+
+```{r}
+menarche$Total
+```
+
+```{r}
+cbind(menarche$Menarche, menarche$Total-menarche$Menarche)
+```
+
+```{r}
+glm.out = glm(cbind(Menarche, Total-Menarche) ~ Age, family=binomial(logit), data=menarche)
+summary(glm.out)
+```
+
+
+```{r}
+
+plot(Menarche/Total ~ Age, data=menarche)
+lines(menarche$Age, glm.out$fitted, type="l", col="red")
+title(main="Menarche Data with Fitted Logistic Regression Line")
+
+
+```
+
+##
+
+https://stats.idre.ucla.edu/r/dae/logit-regression/
+\[https://stats.idre.ucla.edu/r/dae/logit-regression/\]
+
+Example 2. A researcher is interested in how variables, such as GRE (Graduate Record Exam scores), GPA (grade point average) and prestige of the undergraduate institution, effect admission into graduate school. The response variable, admit/don’t admit, is a binary variable.
+
+```{r}
+mydata <- read.csv("https://stats.idre.ucla.edu/stat/data/binary.csv")
+## view the first few rows of the data
+head(mydata)
+```
+
+
+
+```{r}
+summary(mydata)
+
+```
+
+```{r}
+sd(mydata$admit)
+```
+
+```{r}
+help(sapply)
+sapply(mydata, sd)
+```
+```{r}
+## two-way contingency table of categorical outcome and predictors we want
+## to make sure there are not 0 cells
+help(xtabs)
+xtabs(~admit + rank, data = mydata)
+```
+
+```{r}
+mydata$rank <- factor(mydata$rank)
+mydata$rank
+mylogit <- glm(admit ~ gre + gpa + rank, data = mydata, family = "binomial")
+```
+
+```{r}
+summary(mylogit)
+```
+```{r}
+## CIs using profiled log-likelihood
+confint(mylogit)
+```
+```{r}
+## CIs using standard errors
+confint.default(mylogit)
+```
+
+
+```{r}
+library(aod)
+library(ggplot2)
+```
+
+```{r}
+wald.test(b = coef(mylogit), Sigma = vcov(mylogit), Terms = 4:6)
+```
+
+
+
+```{r}
+## odds ratios only
+coef(mylogit)
+```
+
+```{r}
+## odds ratios only
+exp(coef(mylogit))
+```
+
+```{r}
+## odds ratios and 95% CI
+exp(cbind(OR = coef(mylogit), confint(mylogit)))
+```
+
+```{r}
+newdata1 <- with(mydata, data.frame(gre = mean(gre), gpa = mean(gpa), rank = factor(1:4)))
+
+## view data frame
+newdata1
+```
+
+```{r}
+newdata1$rankP <- predict(mylogit, newdata = newdata1, type = "response")
+newdata1
+```
+
+```{r}
+newdata2 <- with(mydata, data.frame(gre = rep(seq(from = 200, to = 800, length.out = 100),
+    4), gpa = mean(gpa), rank = factor(rep(1:4, each = 100))))
+```
+
+```{r}
+newdata3 <- cbind(newdata2, predict(mylogit, newdata = newdata2, type = "link",
+    se = TRUE))
+newdata3 <- within(newdata3, {
+    PredictedProb <- plogis(fit)
+    LL <- plogis(fit - (1.96 * se.fit))
+    UL <- plogis(fit + (1.96 * se.fit))
+})
+
+## view first few rows of final dataset
+head(newdata3)
+```
+
+```{r}
+ggplot(newdata3, aes(x = gre, y = PredictedProb)) + geom_ribbon(aes(ymin = LL,
+    ymax = UL, fill = rank), alpha = 0.2) + geom_line(aes(colour = rank),
+    size = 1)
+```
+
+***
+
+Back to \[http://ww2.coastal.edu/kingw/statistics/R-tutorials/logistic.html\]
+
+Visualising Categorical Data
+https://rstudio-pubs-static.s3.amazonaws.com/300645_f342587e10674aebafd57e94d1527f20.html
+\[https://rstudio-pubs-static.s3.amazonaws.com/300645_f342587e10674aebafd57e94d1527f20.html\]
+
+Example 3: Logistic Regression: Categorical Predictors
+
+In the UCBAdmissions dataset, when we look at the Admit and Gender variables, there appears to be bias towards the number of men being admitted, with women having a lower acceptance rate overall. When we compare Admit and Gender with Dept, this bias disappears and we can see that the admission rates are similar for males and females in most departments, except A.
+
+
+```{r}
+ftable(UCBAdmissions, col.vars="Admit")
+```
+
+```{r}
+dimnames(UCBAdmissions)
+```
+
+```{r}
+margin.table(UCBAdmissions, c(2,1))
+```
+
+```{r}
+margin.table(UCBAdmissions, c(3,1))
+```
+
+```{r}
+margin.table(UCBAdmissions, c(2,3))
+```
+
+```{r}
+### begin copying here
+ucb.df = data.frame(gender=rep(c("Male","Female"),c(6,6)),
+                    dept=rep(LETTERS[1:6],2),
+                    yes=c(512,353,120,138,53,22,89,17,202,131,94,24),
+                    no=c(313,207,205,279,138,351,19,8,391,244,299,317))
+### end copying here and paste into the R Console
+
+ucb.df
+```
+
+```{r}
+mod.form = "cbind(yes,no) ~ gender * dept"     # mind the quotes here!
+glm.out = glm(mod.form, family=binomial(logit), data=ucb.df)
+```
+
+```{r}
+anova(glm.out, test="Chisq")
+```
+
+```{r}
+summary(glm.out)
+```
+
+```{r}
+exp(-1.0521)
+```
+
+```{r}
+1/exp(-1.0521)
+```
+
+```{r}
+exp(-2.2046)
+```
+
+```{r}
+exp(-2.2046) / exp(-2.1662)          # C:A / D:A leaves C:D
+```
+
+```{r}
+mod.form="cbind(yes,no) ~ dept + gender"
+glm.out=glm(mod.form, family=binomial(logit), data=ucb.df) 
+anova(glm.out, test="Chisq")
+```
+
+```{r}
+summary(glm.out)
+```
+

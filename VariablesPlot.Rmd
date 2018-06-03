@@ -1,0 +1,185 @@
+---
+title: "VariablesPlot"
+author: "Yu-Chen Xue"
+date: "2018年6月3日"
+header-includes:
+  \usepackage{ctex}
+output:
+  html_document: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load datasets 
+```{r}
+library(ggplot2)
+library(readr)
+KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+```
+
+## Plots
+
+### Income
+```{r}
+KidCreative$Income <- as.factor(KidCreative$Income)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = Income, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Is Female
+```{r}
+KidCreative$`Is Female` <- as.factor(KidCreative$`Is Female`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Is Female`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Is Married
+```{r}
+KidCreative$`Is Married` <- as.factor(KidCreative$`Is Married`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Is Married`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Has College
+```{r}
+KidCreative$`Has College` <- as.factor(KidCreative$`Has College`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Has College`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Is Professional
+```{r}
+KidCreative$`Is Professional` <- as.factor(KidCreative$`Is Professional`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Is Professional`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Is Retired
+```{r}
+KidCreative$`Is Retired` <- as.factor(KidCreative$`Is Retired`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x =`Is Retired`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Unemployed
+```{r}
+KidCreative$Unemployed <- as.factor(KidCreative$Unemployed)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = Unemployed, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Residence Length
+```{r}
+KidCreative$`Residence Length` <- as.factor(KidCreative$`Residence Length`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Residence Length`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Dual Income
+```{r}
+KidCreative$`Dual Income` <- as.factor(KidCreative$`Dual Income`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Dual Income`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Minors
+```{r}
+KidCreative$`Minors` <- as.factor(KidCreative$`Minors`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Minors`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Own
+```{r}
+KidCreative$`Own` <- as.factor(KidCreative$`Own`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Own`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### House
+```{r}
+KidCreative$`House` <- as.factor(KidCreative$`House`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `House`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### White
+```{r}
+KidCreative$`White` <- as.factor(KidCreative$`White`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `White`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### English
+```{r}
+KidCreative$`English` <- as.factor(KidCreative$`English`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `English`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Prev Child Mag
+```{r}
+KidCreative$`Prev Child Mag` <- as.factor(KidCreative$`Prev Child Mag`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Prev Child Mag`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Prev Parent Mag
+```{r}
+KidCreative$`Prev Parent Mag` <- as.factor(KidCreative$`Prev Parent Mag`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Prev Parent Mag`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+

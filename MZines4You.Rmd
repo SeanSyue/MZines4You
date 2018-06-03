@@ -1,0 +1,140 @@
+---
+title: "MZins4You"
+author: "Yu-Chen Xue"
+date: "2018年6月3日"
+header-includes:
+  \usepackage{ctex}
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(magrittr)
+library(dplyr)
+```
+
+
+## Read csv file
+```{r}
+library(readr)
+KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+```
+
+```{r}
+summary(KidCreative)
+```
+
+```{r}
+plot(Buy~Income, KidCreative)
+```
+
+
+## l4
+
+```{r}
+l4 <- lm(Buy~ ., KidCreative)
+summary(l4)
+anova(l4)
+coef(l4)
+```
+
+## l1
+
+```{r}
+l1 <- lm(Buy~ Income, KidCreative)
+summary(l1)
+anova(l1)
+coef(l1)
+```
+
+## l3
+
+```{r}
+l3 <- lm(Buy~Income+`Is Female`+Minors+White+`Prev Child Mag`, KidCreative)
+summary(l3)
+anova(l3)
+coef(l3)
+```
+
+## l5
+```{r}
+l5 <- lm(Buy~Income*`Dual Income`*`Own`*`House`*`Is Female`*`Is Married`*White*`Prev Child Mag`*`Has College`*`Is Professional`, KidCreative)
+summary(l5)
+anova(l5)
+coef(l5)
+```
+
+## l6
+```{r}
+l6 <- lm(Buy~Income*`Dual Income`*`Own`*`House`, KidCreative)
+summary(l6)
+anova(l6)
+coef(l6)
+```
+
+## l7
+```{r}
+l7 <- lm(Buy~Income*`Dual Income`, KidCreative)
+summary(l7)
+anova(l7)
+coef(l7)
+```
+
+## l8
+```{r}
+l8 <- lm(Buy~`Own`*`House`, KidCreative)
+summary(l8)
+anova(l8)
+coef(l8)
+```
+
+
+## l9
+```{r}
+l9 <- lm(Buy~Income*`Own`*`House`*`Dual Income`*`Prev Child Mag`*`Is Professional`*White*`Is Married`*`Has College`, KidCreative)
+summary(l9)
+anova(l9)
+coef(l9)
+```
+
+
+## l10
+```{r}
+l10 <- lm(Buy~
+              Income+
+              `Dual Income`+
+              `Prev Child Mag`+
+              White+
+              Income:Own+
+              Income:`Dual Income`+
+              Income:`Is Professional`+
+              Income:White+
+              `Prev Child Mag`:White:`Is Married`+
+              Income:House:`Is Professional`:`Has College`
+              , KidCreative)
+summary(l10)
+anova(l10)
+coef(l10)
+```
+
+## l11
+```{r}
+l11 <- lm(Buy~
+              Income+
+              `Dual Income`+
+              White+
+              Income:Own+
+              Income:`Dual Income`+
+              Income:White
+              , KidCreative)
+summary(l11)
+anova(l11)
+coef(l11)
+```

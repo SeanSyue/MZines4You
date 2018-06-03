@@ -1,0 +1,309 @@
+---
+title: "Lecture 24 Markdown"
+author: "Prof. Sheng-Luen Chung"
+date: "2018撟<b4>5<e6><9c><88>30<e6>"
+output:
+  html_document: default
+  pdf_document:
+    latex_engine: xelatex
+  word_document: default
+header-includes: \usepackage{ctex}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 作業4：Data Mining, due  6/7 (五) 早上 9:00
+
+將 R Markdown 檔以：姓名_學號為主檔名命名，
+寄給助教：willy655042@gmail.com
+並 cc 給我：slchung@mail.ntust.edu.tw
+
+*What a Multivariate Logistic Regression Data Set Looks Like: An Example*
+
+http://logisticregressionanalysis.com/303-what-a-logistic-regression-data-set-looks-like-an-example/
+
+###The Context – A Data Mining Example
+
+In this example, a magazine reseller is trying to decide what magazines to market to customers. In the “old days,” this might have involved trying to decide which customers to send advertisements to via regular mail. In the context of today and the “web,” this might involved deciding what recommendations to make to a customer viewing a web page about other items that the customer might be interested in and therefore want to buy. The two problem are essentially the same.
+
+***
+
+#Factors in Regression (Chapter 13, "Linear Models with R" by Julian Faraway)
+
+\[http://www.utstat.toronto.edu/~brunner/books/LinearModelsWithR.pdf \]
+
+# 如何解釋分類 (Categorical' Factor) 性質的解釋變數呢？
+
+## Predictors that are qualitative in nature are described as categorical variables or factors.
+
+用來當作解釋變數本身即為定性的 (vs 定量)，本質上比較像是「分類性 (categorial) 變數」或者就稱之為因子 (factor)
+
+***
+
+## A Two-level Factor Example
+\[https://www.rdocumentation.org/packages/faraway/versions/1.0.7\]
+
+創傷後壓力症（Post-traumatic stress disorder，簡稱PTSD，又稱創傷後遺症）
+```{r}
+library(faraway)
+data(sexab)
+```
+1. The response variable is ptsd (Post-traumatic stress disorder on standard scale). 
+2. Explanatory variables are csa (childhood sexual abuse) which is a *binary* variable and cpa (childhood physical abuse) which is a *quantitative* variable.
+
+```{r}
+str(sexab)
+```
+
+```{r}
+head(sexab)
+tail(sexab)
+```
+
+```{r}
+summary(sexab)
+```
+
+這兩類是不同屬性的解釋變數
+
+```{r}
+class(sexab[,1])
+class(sexab[,3])
+```
+
+## A factor specifies a discrete classification(grouping)
+# by() is used to apply a function to a data frame split by a factor.
+將整個 sexab 的表，按 sexab$csa 來作 summary
+```{r}
+by(sexab, sexab$csa, summary)
+```
+
+##不只如此，也可以分類畫圖
+
+```{r}
+plot(ptsd ~ csa, sexab)
+
+```
+We see that those in abused group have higher levels of PTSD than those in the nonabused group. We can test this difference by using linear regression.
+
+***
+
+Compare the result of the linear regression with that of t-test.
+```{r}
+ g1 <- lm(ptsd ~ csa, sexab)
+ summary(g1)
+```
+
+# 以下解釋 factor variable 是怎麼編碼的？
+
+1. We see that "Abused" is coded as zero and "NotAbused" is coded as one.
+2. The default is made alphabetically. This means that "Abused" is the reference level here and that the parameters represent the difference between "NotAbused" and this reference level.
+
+## Can you interpret the coefficients now?
+
+預設是 "Abused" 也就是假設全部都有外 abused，所以當遇到的情況是 "NotAbused" 時，他在回歸分析的公式上，有一個負的係數項。
+
+這感覺怪怪的，應該是要假設 "NotAbused" 的才比較好。但，我們要怎麼反應在公式上呢？
+
+## You can change the reference level to "NotAbused":
+```{r}
+sexab$csa <- relevel(sexab$csa,ref="NotAbused")
+```
+## How do you expect the coefficients to change?
+
+```{r}
+plot(ptsd ~ csa, sexab)
+
+```
+```{r}
+g1 <- lm(ptsd ~ csa, data=sexab)
+summary(g1)
+```
+
+# 以下分析：A Factor + A Continuous Variable
+
+In the following numerical summary and plot we see that the abused group suffered
+higher level of cpa than those in the nonabused group. This suggests physical abuse
+is an alternative explanation of higher PTSD in the sexually abused group.
+
+```{r}
+by(sexab, sexab$csa, summary)
+```
+
+如果我們看 ptsd 與 cpa (體罰) 的關係
+```{r}
+plot(ptsd ~ cpa, sexab)
+```
+在看 ptsd 與 cpa (體罰) 的關係時，我們進一步分開看有沒有 csa 的差別
+
+```{r}
+plot(ptsd ~ cpa, pch = as.character(csa), sexab)
+
+```
+
+```{r}
+g2 <- lm(ptsd ~ .,  data=sexab)
+summary(g2)
+
+```
+## Note the change in the coefficient of CSA in g1 and g2.
+
+After adjusting the effect of childhood physical abuse, our esitmate of the effect
+of childhood sexual abuse on PTSD is mildly reduced.
+
+```{r}
+plot(ptsd ~ cpa, pch=as.character(csa), sexab)
+abline(3.975,0.551)
+abline(3.975 + 6.273,0.551,lty=2)
+```
+
+
+## We can fit seperate regression lines model by adding an iteraction term:
+```{r}
+g3 <- lm(ptsd ~ cpa + csa + cpa:csa, sexab)
+model.matrix(g3)
+
+```
+The interaction term cpa:csaAbused is represented in the fourth column of the matrix as the product of the second and third columns.
+
+```{r}
+summary(g3)
+```
+## Can you write down the regression equations for both Abused and NotAbused groups?
+
+## The interaction term is not significant and the model can be simplified:
+
+```{r}
+g <- lm(ptsd ~ cpa + csa, sexab)
+```
+
+## The diagnostics:
+```{r}
+plot(fitted(g),residuals(g),pch=as.character(sexab$csa),xlab="Fitted",ylab="Residuals")
+```
+
+# Factors with more than two levels
+
+## The fruitfly data frame has 9 rows and 3 columns. 125 fruitflies were divided randomly into 5 groups of 25 each. 
+
+The response was the longevity of the fruitfly in days. 
+
+1. (isolated) One group was kept solitary, while 
+2. (low) another was kept individually with a virgin female each day. 
+3. (high) Another group was given 8 virgin females per day. 
+4. (one) As an additional control the fourth groups was kept with one pregnant females per day. 
+5. (many) As an additional control the  fifth group was kept with  eight pregnant females per day.
+
+Pregnant fruitflies will not mate. 
+
+The thorax length of each male was measured as this was known to affect longevity. One observation in the many group has been lost.
+
+```{r}
+data(fruitfly)
+ff = fruitfly
+```
+
+```{r}
+str(fruitfly)
+```
+
+```{r}
+head(fruitfly)
+```
+
+```{r}
+tail(fruitfly)
+```
+
+```{r}
+summary(fruitfly)
+```
+
+##The response variable is longevity
+
+### 如果是依 activity 分類列
+
+```{r}
+plot(longevity ~ activity, ff)
+```
+
+
+### 如果是依 thorax 分類列
+
+```{r}
+plot(longevity ~ thorax, ff)
+```
+
+
+### 如果是看 thorax，但也分依 activity 分類列
+```{r}
+plot(longevity ~ thorax, ff, pch=unclass(activity))
+legend(0.63,100,levels(ff$activity),pch=1:5)
+```
+
+# 你們覺得怎麼樣？
+
+```{r}
+g <- lm(longevity ~ thorax*activity, ff)
+summary(g)
+```
+## The above model is equivalent to g <- lm(longevity ~ thorax + activity + thorax:activity, ff)
+
+## Since "isolated" is the refence level, the fitted regression line within this group is longevity = -50.242 + 136.1268*thorax
+
+## For "one", it is longevity = (-50.242 + 6.5172) + (136.1268 - 4.6771)* thorax
+
+## How to interpret the p-values?
+```{r}
+anova(g)
+```
+
+## This is a sequential analysis of variance table.
+
+Starting from a null model, terms are added and sequentially tested.
+
+ Null                        Alternative
+------------------------------------------
+ y ~ 1                       y ~ throax
+ y ~ thorax                  y ~ thorax + activity
+ y ~ thorax + activity       y ~ thorax + activity + thorax:activity
+
+## The interaction term thorax:activity is not significant indicating that we can fit the same slope with each group.
+
+***
+
+#### Diagnostics
+
+```{r}
+plot(g$res ~ g$fitted,pch=unclass(ff$activit))
+```
+Nonconstant variance. It does not appear to be related the five groups.
+Log tranformation on "longevity" should help.
+
+```{r}
+gl <- lm(log(longevity) ~ thorax+activity, ff)
+plot(gl$res ~ gl$fitted, pch=unclass(ff$activity))
+
+```
+
+```{r}
+summary(gl)
+```
+
+## We can interpret the coefficients as having a multiplicative effect:
+
+```{r}
+coef(gl)
+```
+
+
+```{r}
+exp(coef(gl)[3:6])
+```
+```{r}
+exp(coef(gl)[4])/exp(coef(gl)[6])
+```
+
+## This means that the low activity group has a 34% increase in lifespan compared to the high activity group.

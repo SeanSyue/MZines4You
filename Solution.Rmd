@@ -1,0 +1,86 @@
+---
+title: "MZins4You"
+author: "Yu-Chen Xue"
+date: "2018年6月3日"
+header-includes:
+  \usepackage{ctex}
+output:
+  html_document: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(magrittr)
+library(dplyr)
+```
+
+
+## Read csv file
+```{r}
+library(readr)
+KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+```
+
+```{r}
+summary(KidCreative)
+```
+
+```{r}
+plot(Buy~Income, KidCreative)
+```
+
+## Solution 1
+```{r}
+l1 <- lm(Buy~ Income, KidCreative)
+summary(l1)
+anova(l1)
+coef(l1)
+```
+
+## Solution 2
+### Step1
+```{r}
+s1 <- lm(Buy~Income*`Dual Income`*`Own`*`House`*`Is Female`*`Is Married`*White*`Prev Child Mag`*`Has College`*`Is Professional`, KidCreative)
+summary(s1)
+anova(s1)
+coef(s1)
+```
+
+### Step2
+```{r}
+s2 <- lm(Buy~
+              Income+
+              `Dual Income`+
+              `Prev Child Mag`+
+              White+
+              Income:Own+
+              Income:`Dual Income`+
+              Income:`Is Professional`+
+              Income:White+
+              `Prev Child Mag`:White:`Is Married`+
+              Income:House:`Is Professional`:`Has College`
+              , KidCreative)
+summary(s2)
+anova(s2)
+coef(s2)
+```
+
+### Step3
+```{r}
+l2 <- lm(Buy~
+              `Dual Income`+
+              White+
+              Income:Own+
+              Income:`Dual Income`+
+              Income:White
+              , KidCreative)
+summary(l2)
+anova(l2)
+coef(l2)
+```
