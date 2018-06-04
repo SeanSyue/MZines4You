@@ -38,15 +38,14 @@ Language (English = 1 is the primary language in the household is English, 0 oth
 library(ggplot2)
 library(readr)
 KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
-data.cata <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
 ```
 
 ### Income
 ```{r}
-data.cata$Income <- as.factor(data.cata$Income)
-data.cata$Buy <- as.factor(data.cata$Buy)
+KidCreative$Income <- as.factor(KidCreative$Income)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
 
-ggplot(data.cata, aes(x = Income, fill = Buy)) + 
+ggplot(KidCreative, aes(x = Income, fill = Buy)) + 
 geom_bar(width = 0.75, position='dodge') + 
 scale_fill_manual(values = c('gray43', 'steelblue1'))
 ```

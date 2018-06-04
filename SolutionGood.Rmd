@@ -37,6 +37,8 @@ Language (English = 1 is the primary language in the household is English, 0 oth
 library(ggplot2)
 library(readr)
 KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+names(KidCreative)
+head(KidCreative)
 ```
 
 ## 採用變數Income做回歸模型

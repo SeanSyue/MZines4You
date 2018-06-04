@@ -157,6 +157,27 @@ KidCreative &lt;- read_csv(&quot;D:/WORKSPACE/DATASETS/KidCreative.csv&quot;)</c
 ##   `Prev Child Mag` = col_integer(),
 ##   `Prev Parent Mag` = col_integer()
 ## )</code></pre>
+<pre class="r"><code>names(KidCreative)</code></pre>
+<pre><code>##  [1] &quot;Obs No.&quot;          &quot;Buy&quot;              &quot;Income&quot;          
+##  [4] &quot;Is Female&quot;        &quot;Is Married&quot;       &quot;Has College&quot;     
+##  [7] &quot;Is Professional&quot;  &quot;Is Retired&quot;       &quot;Unemployed&quot;      
+## [10] &quot;Residence Length&quot; &quot;Dual Income&quot;      &quot;Minors&quot;          
+## [13] &quot;Own&quot;              &quot;House&quot;            &quot;White&quot;           
+## [16] &quot;English&quot;          &quot;Prev Child Mag&quot;   &quot;Prev Parent Mag&quot;</code></pre>
+<pre class="r"><code>head(KidCreative)</code></pre>
+<pre><code>## # A tibble: 6 x 18
+##   `Obs No.`   Buy Income `Is Female` `Is Married` `Has College`
+##       &lt;int&gt; &lt;int&gt;  &lt;int&gt;       &lt;int&gt;        &lt;int&gt;         &lt;int&gt;
+## 1         1     0  24000           1            0             1
+## 2         2     1  75000           1            1             1
+## 3         3     0  46000           1            1             0
+## 4         4     1  70000           0            1             0
+## 5         5     0  43000           1            0             0
+## 6         6     0  24000           1            1             0
+## # ... with 12 more variables: `Is Professional` &lt;int&gt;, `Is Retired` &lt;int&gt;,
+## #   Unemployed &lt;int&gt;, `Residence Length` &lt;int&gt;, `Dual Income` &lt;int&gt;,
+## #   Minors &lt;int&gt;, Own &lt;int&gt;, House &lt;int&gt;, White &lt;int&gt;, English &lt;int&gt;,
+## #   `Prev Child Mag` &lt;int&gt;, `Prev Parent Mag` &lt;int&gt;</code></pre>
 </div>
 <div id="income" class="section level2">
 <h2>採用變數Income做回歸模型</h2>
