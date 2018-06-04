@@ -1,0 +1,205 @@
+---
+title: "Solution2"
+author: "Yu-Chen Xue"
+date: "2018年6月3日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+library(ggplot2)
+library(magrittr)
+library(dplyr)
+```
+
+
+## Read csv file
+```{r}
+library(readr)
+KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+```
+
+
+```{r}
+model2 <- glm(Buy~ Income*`Dual Income`*`Own`
+              , KidCreative, family = "binomial")
+summary(model2)
+anova(model2)
+coef(model2)
+```
+
+```{r}
+## odds ratios and 95% CI
+exp(cbind(OR = coef(model2), confint(model2)))
+```
+
+```{r}
+exp(coef(model2))
+```
+
+
+```{r}
+newdata1 <- with(KidCreative, data.frame(Income = mean(Income), `Dual Income` = factor(0:1), `Own` = factor(0:1)))
+## view data frame
+newdata1
+```
+
+
+```{r}
+newdata1$rankP <- predict(mylogit, newdata = newdata1, type = "response")
+newdata1
+```
+
+
+```{r}
+plot(model2$res ~ model2$fitted,pch=unclass(KidCreative$`Dual Income`))
+```
+
+
+```{r}
+plot(model2$res ~ model2$fitted,pch=unclass(KidCreative$`Own`))
+```
+
+```{r}
+xweight <- seq(0, 80000, 5000)
+yweight <- predict(model2, list(Income=xweight),type="response")
+plot(KidCreative$Income, KidCreative$Buy, pch = 16, xlab = "WEIGHT (g)", ylab = "VS")
+lines(xweight, yweight)
+```
+
+
+```{r}
+range(KidCreative$`Income`)
+```
+
+
+
+```{r}
+model3 <- glm(Buy~ Income, KidCreative, family = "binomial")
+summary(model3)
+anova(model3)
+coef(model3)
+```
+
+
+```{r}
+xweight <- seq(0, 75000, 1000)
+xweight
+```
+
+
+```{r}
+yweight <- predict(model3, list(Income=xweight),type="response")
+yweight
+```
+
+
+
+
+```{r}
+plot(KidCreative$Income, KidCreative$Buy, pch = 1, xlab = "WEIGHT (g)", ylab = "Buy")
+lines(xweight, yweight)
+```
+
+```{r}
+predict(model3, list(Income=63000),type="response")
+```
+
+
+
+```{r}
+model4 <- glm(Buy~ `Dual Income`*Own , KidCreative, family = "binomial", x=TRUE)
+summary(model4)
+anova(model4)
+coef(model4)
+exp(coef(model4))
+predict(model4, list( `Dual Income`=1, Own=1),type="response")
+```
+
+
+```{r}
+model5 <- glm(Buy~ `Dual Income`*Own*Income , KidCreative, family = "binomial")
+summary(model5)
+anova(model5)
+coef(model5)
+exp(coef(model5))
+predict(model5, list( `Dual Income`=1, Own=1, Income=63000),type="response")
+```
+
+
+
+```{r}
+model5 <- glm(Buy~ `Is Married`*`Is Female`*`Has College`*`Is Professional`, KidCreative, family = "binomial")
+summary(model5)
+anova(model5)
+coef(model5)
+exp(coef(model5))
+predict(model5, list(`Is Married`=1, `Is Female`=1, `Has College`=1, `Is Professional`=1),type="response")
+```
+
+```{r}
+model5 <- glm(Buy~ `Is Married`*`Is Female`*`Has College`*`Is Professional`, KidCreative, family = "binomial")
+summary(model5)
+anova(model5)
+coef(model5)
+exp(coef(model5))
+predict(model5, list(`Is Married`=1, `Is Female`=1, `Has College`=1, `Is Professional`=1),type="response")
+```
+
+```{r}
+model6 <- glm(Buy~ `Dual Income`*House*White*`Prev Child Mag`, KidCreative, family = "binomial")
+summary(model6)
+anova(model6)
+coef(model6)
+exp(coef(model6))
+predict(model6, list(`Dual Income`=1, House=1, White=1, `Prev Child Mag`=1),type="response")
+```
+
+```{r}
+model7 <- glm(Buy~ `Dual Income`*House*White*`Prev Child Mag`, KidCreative, family = "binomial")
+summary(model7)
+anova(model7)
+coef(model7)
+exp(coef(model7))
+predict(model7, list(`Dual Income`=1, House=1, White=1, `Prev Child Mag`=1),type="response")
+```
+
+```{r}
+model8 <- glm(Buy~ `Dual Income`*`Is Married`*`Is Female`*`Prev Child Mag`, KidCreative, family = "binomial")
+summary(model8)
+anova(model8)
+coef(model8)
+exp(coef(model8))
+predict(model8, list(`Dual Income`=1, `Is Married`=1, `Is Female`=1, `Prev Child Mag`=1),type="response")
+```
+
+```{r}
+model9 <- glm(Buy~ Income*`Is Female`*`Prev Child Mag`, KidCreative, family = "binomial")
+summary(model9)
+anova(model9)
+coef(model9)
+exp(coef(model9))
+predict(model9, list(Income=63000, `Is Female`=1, `Prev Child Mag`=1),type="response")
+```
+
+```{r}
+model10 <- glm(Buy~ `Is Female`*`Prev Child Mag`, KidCreative, family = "binomial")
+summary(model10)
+anova(model10)
+coef(model10)
+exp(coef(model10))
+predict(model10, list(`Is Female`=1, `Prev Child Mag`=1),type="response")
+```
+
+```{r}
+model11 <- glm(Buy~ Income*`Prev Child Mag`, KidCreative, family = "binomial")
+summary(model11)
+anova(model11)
+coef(model11)
+exp(coef(model11))
+predict(model11, list(Income=63000, `Prev Child Mag`=1),type="response")
+```

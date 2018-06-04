@@ -84,3 +84,33 @@ summary(l2)
 anova(l2)
 coef(l2)
 ```
+
+## Solution 3
+```{r}
+model <- glm(Buy~
+              Income*
+                 `Is Married`*
+              `Is Female`*
+              `Has College`*
+              `Is Professional`*
+              `Dual Income`*
+              House*
+              White*
+              Own*
+              `Prev Child Mag`
+              , KidCreative, family = "binomial")
+model.sum <- summary(model)
+anova(model)
+coef(model)
+```
+
+```{r}
+model.sum
+summary(model)$coeff[-1,4] < 0.05
+```
+
+```{r}
+# Income*`Is Married`*`Is Female`*`Has College`*`Is Professional`*`Dual Income`*House*White*Own*`Prev Child Mag`
+predict(model, list(Income=63000, `Is Married`=1, `Is Female`=1, `Has College`=1, `Is Professional`=1, `Dual Income`=1, House=1, White=1, Own=1, `Prev Child Mag`=1),type="terms")
+```
+
