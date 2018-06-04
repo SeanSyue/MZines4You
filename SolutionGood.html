@@ -125,33 +125,17 @@ $(document).ready(function () {
 </div>
 
 
+<div id="mzines4you-solutions" class="section level1">
+<h1>MZines4You – Solutions</h1>
+<div id="dateset-source" class="section level5">
+<h5>Dateset source:</h5>
+<p><a href="http://logisticregressionanalysis.com/303-what-a-logistic-regression-data-set-looks-like-an-example/" class="uri">http://logisticregressionanalysis.com/303-what-a-logistic-regression-data-set-looks-like-an-example/</a> ##### Dataset introduction Household Income (Income; rounded to the nearest $1,000.00) Gender (IsFemale = 1 if the person is female, 0 otherwise) Marital Status (IsMarried = 1 if married, 0 otherwise) College Educated (HasCollege = 1 if has one or more years of college education, 0 otherwise) Employed in a Profession (IsProfessional = 1 if employed in a profession, 0 otherwise) Retired (IsRetired = 1 if retired, 0 otherwise) Not employed (Unemployed = 1 if not employed, 0 otherwise) Length of Residency in Current City (ResLength; in years) Dual Income if Married (Dual = 1 if dual income, 0 otherwise) Children (Minors = 1 if children under 18 are in the household, 0 otherwise) Home ownership (Own = 1 if own residence, 0 otherwise) Resident type (House = 1 if residence is a single family house, 0 otherwise) Race (White = 1 if race is white, 0 otherwise) Language (English = 1 is the primary language in the household is English, 0 otherwise)</p>
+</div>
 <div class="section level2">
 <h2>載入資料集</h2>
 <pre class="r"><code>library(ggplot2)
 library(readr)
 KidCreative &lt;- read_csv(&quot;D:/WORKSPACE/DATASETS/KidCreative.csv&quot;)</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   `Obs No.` = col_integer(),
-##   Buy = col_integer(),
-##   Income = col_integer(),
-##   `Is Female` = col_integer(),
-##   `Is Married` = col_integer(),
-##   `Has College` = col_integer(),
-##   `Is Professional` = col_integer(),
-##   `Is Retired` = col_integer(),
-##   Unemployed = col_integer(),
-##   `Residence Length` = col_integer(),
-##   `Dual Income` = col_integer(),
-##   Minors = col_integer(),
-##   Own = col_integer(),
-##   House = col_integer(),
-##   White = col_integer(),
-##   English = col_integer(),
-##   `Prev Child Mag` = col_integer(),
-##   `Prev Parent Mag` = col_integer()
-## )</code></pre>
-<pre class="r"><code>data.cata &lt;- read_csv(&quot;D:/WORKSPACE/DATASETS/KidCreative.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   `Obs No.` = col_integer(),
@@ -682,6 +666,7 @@ summary(model5)</code></pre>
 <pre class="r"><code>predict(model5, list(Income=63000, `Prev Child Mag`=1),type=&quot;response&quot;)</code></pre>
 <pre><code>##         1 
 ## 0.7311244</code></pre>
+</div>
 </div>
 
 
