@@ -18,9 +18,108 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(readr)
 KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
-model <- glm(Buy~ .- `Obs No.`, KidCreative, family = "binomial")
-summary(model)
-exp(coef(model))
+```
+
+### Have an overview on the dataset
+```{r}
+head(KidCreative)
+summary(KidCreative)
 ```
 
 
+
+### 利用所有的解釋變數構建回歸模型，查看結果匯報
+根據匯報結果中的z value和Pr(>|z|)，Income對預測結果的影響最大。除此之外，`Is Female`,White所佔的比重也比較大。其他比較有影響力的解釋變數包括`Residence Length`, Minors, English, `Prev Child Mag`。
+```{r}
+KidCreative$Income <- as.numeric(KidCreative$Income)
+model <- glm(Buy~ .- `Obs No.`, KidCreative, family = "binomial")
+summary(model)
+```
+
+### Anova table
+由anova table看出，Income變數對結果預測的貢獻遠遠大於其他變數
+```{r}
+anova(model)
+```
+
+### 查看模型所給出的各個解釋變數的勝率
+可以看出，所有變數與結果呈現正相關關係。所有解釋變數中，White人群相對於`Not White`人群的購買意願差距最大，類似的現象同樣發生在`Is Female`, English,`Prev Child Mag`中。相對的，`Has College`的人群並沒有比`Not Has College`而言大很多
+```{r}
+exp(coef(model))
+```
+
+## 就上述幾個解釋能力比較強的解釋變數，就各個變數對應的人數和購買數作圖分析
+### White
+```{r}
+KidCreative$`White` <- as.factor(KidCreative$`White`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `White`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### English
+```{r}
+KidCreative$`English` <- as.factor(KidCreative$`English`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `English`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Income
+```{r}
+new_data <- read.csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+new_data$Income <- as.integer(new_data$Income)
+new_data$Buy <- as.factor(new_data$Buy)
+
+ ggplot(new_data, aes(x = Income, fill = Buy)) + 
+    geom_histogram(aes(y=(..count..)), position='dodge', bins=30) + 
+    ylab("count")
+    scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+### Prev Child Mag
+```{r}
+KidCreative$`Prev Child Mag` <- as.factor(KidCreative$`Prev Child Mag`)
+KidCreative$Buy <- as.factor(KidCreative$Buy)
+
+ggplot(KidCreative, aes(x = `Prev Child Mag`, fill = Buy)) + 
+geom_bar(width = 0.75, position='dodge') + 
+scale_fill_manual(values = c('gray43', 'steelblue1'))
+```
+
+## 既然Income對結果的解釋能力最大，那麼接下來討論只使用Income變數進行預測並顯示結果匯報
+看Residual deviance和AIC數值可以得知，因為少了其他眾多變數，這個模型相比較於前面的一個模型而言，解釋能力不如前者。
+```{r}
+KidCreative <- read.csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+model.income <- glm(Buy~ Income, KidCreative, family = "binomial")
+summary(model.income)
+```
+
+### 接下來針對不同的Income數值，查看此模型的預測能力。先生成Income中各個數值所組成的數列
+```{r}
+x.seq <- seq(0, 75000, 1000)
+x.seq
+```
+
+### 借助上述數列來做預測
+```{r}
+pred.income <- predict(model.income, list(Income=x.seq),type="response")
+pred.income
+```
+
+### 購買機率大於%50的人群所對應的Income數值應該是大於63000，這裡再做一次驗證
+```{r}
+predict(model.income, list(Income=62000),type="response")
+predict(model.income, list(Income=63000),type="response")
+```
+
+### 作圖總結上述結果
+可見，雖然沒辦法單單根據人們的收入準確預測人們的購買的把握，但是Income很好地反映了一個明顯的趨勢：收入越高的人，購買意願越高
+```{r}
+plot(KidCreative$Income, KidCreative$Buy, pch = 1, xlab = "Income", ylab = "Buy")
+lines(x.seq, pred.income)
+```
