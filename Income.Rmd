@@ -1,0 +1,50 @@
+---
+title: "Income"
+author: "Yu-Chen Xue"
+date: "2018年6月8日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load datasets 
+```{r}
+library(readr)
+KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+```
+
+## 既然Income對結果的解釋能力最大，那麼接下來討論只使用Income變數進行預測並顯示結果匯報
+看Residual deviance和AIC數值可以得知，因為少了其他眾多變數，這個模型相比較於前面的一個模型而言，解釋能力不如前者。
+```{r}
+# KidCreative$Income <- as.integer(KidCreative$Income)
+model.income <- glm(Buy~ Income, KidCreative, family = "binomial")
+summary(model.income)
+```
+
+### 接下來針對不同的Income數值，查看此模型的預測能力。先生成Income中各個數值所組成的數列
+```{r}
+x.seq <- seq(0, 75000, 1000)
+x.seq
+```
+
+### 借助上述數列來做預測
+```{r}
+pred.income <- predict(model.income, list(Income=x.seq),type="response")
+pred.income
+```
+
+### 購買機率大於%50的人群所對應的Income數值應該是大於63000，這裡再做一次驗證
+```{r}
+predict(model.income, list(Income=62000),type="response")
+predict(model.income, list(Income=63000),type="response")
+```
+
+### 作圖總結上述結果
+可見，雖然沒辦法單單根據人們的收入準確預測人們的購買的把握，但是Income很好地反映了一個明顯的趨勢：收入越高的人，購買意願越高
+```{r}
+plot(KidCreative$Income, KidCreative$Buy, pch = 1, xlab = "Income", ylab = "Buy")
+lines(x.seq, pred.income)
+```
+
