@@ -1,0 +1,26 @@
+---
+title: "ResultsBetter"
+author: "Yu-Chen Xue"
+date: "2018年6月6日"
+header-includes:
+  \usepackage{ctex}
+output:
+  html_document: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load datasets 
+```{r}
+library(readr)
+KidCreative <- read_csv("D:/WORKSPACE/DATASETS/KidCreative.csv")
+model <- glm(Buy~ .- `Obs No.`, KidCreative, family = "binomial")
+summary(model)
+exp(coef(model))
+```
+
+
